@@ -15,15 +15,50 @@ But the concept of a network of nodes and subnodes made sense to my programmer/s
 # How To Use
 
 ```bash
-# Install 
-uv pip install tdfw
+# 1. Install prerequisites
 
-# Confirm installation and check options
+# Make sure Python is installed and matches the TouchDesigner distributions version and a package manager like uv is available globally.
+
+# 2. Install tdfw globally
+uv pip install --upgrade tdfw
+
+# 3. Confirm installation and explore options
 tdfw help
 
-# Start a TouchDesigner App
+# 4. Doctor check (optional but recommended)
+# Ensures uv/pip/conda and TouchDesigner paths are set up correctly.
+tdfw doctor
+
+# 5. Scaffold a new TouchDesigner App
 tdfw start-app <MyFirstApp>
 
-# Create a Python Extension stub (from your TouchDesigner Project Root i.e. the dir with the <MyFirstApp>.toe file)
+# 6. Open your app in your editor
+cd <MyFirstApp>
+code .   # or cursor ., vim ., etc.
+
+# 7. Create Python Extension stubs
+# Run from your TouchDesigner Project Root (the dir with <MyFirstApp>.toe)
 tdfw create-ext <MyFirstExt>
+
+# 8. Manage environments
+# Initialize a uv environment (falls back to pip if uv is missing)
+tdfw init-env <MyAppEnv>
+
+# Export reproducible requirements for TouchDesigner
+tdfw export-env --manager uv --output requirements.txt
+
+# Import environment from requirements.txt or environment.yml
+tdfw import-env requirements.txt
 ```
+
+# Philosophy
+
+**Legibility first**: Every scaffolded app reads like a table of contents. Extensions are explicit, declarative, and easy to debug.
+
+**Environment reproducibility**: uv.lock for developers, requirements.txt or environment.yml for TouchDesigner. Both humans and TD can bootstrap consistently.
+
+**Cross‑platform ready**: .bat for Windows, .bash for macOS/Linux, with override support for TouchDesigner executable paths.
+
+**Doctor mindset**: Always check your system before scaffolding — tdfw doctor ensures you’re ready.
+
+**Iterative growth**: Start simple (one app, one extension), then evolve into complex state‑machine architectures without spaghetti networks.
