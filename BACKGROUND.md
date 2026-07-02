@@ -1,6 +1,6 @@
 # Touch Designer State Machine Architecture
 
-MAIN Resource: https://www.youtube.com/watch?v=nQT7EhYCVg0
+MAIN Resource: [here](https://www.youtube.com/watch?v=nQT7EhYCVg0)
 
 ## AI Summary
 
@@ -59,18 +59,17 @@ How he organizes EVERY Touch Designer App he builds:
 Application DIR structure
 
 ```bash
-.git
-Backup
-BAT
-|- A <app-name>.bat file (see .bat example below)
-DAT
-|- Where python extensions live
-|- Also where SETTINGS Dir lives
-LOG
-|- log text file outputs from Log component (for debugging)
-.gitignore
-README.md
-<app-name>.toe
+Project Root
+├── .git/                # Git metadata
+├── Backup/              # Backup files
+├── BAT/                 # Batch launchers
+│   └── <app-name>.bat   # Windows launcher script
+├── DAT/                 # Python extensions + settings
+│   └── SETTINGS/        # Configuration directory
+├── LOG/                 # Debugging logs from Log component
+├── .gitignore           # Git ignore rules
+├── README.md            # Project documentation
+└── <app-name>.toe       # TouchDesigner project file
 ```
 
 
