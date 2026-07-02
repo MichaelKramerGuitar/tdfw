@@ -1,4 +1,4 @@
-![Coverage](https://codecov.io/gh/MichaelKramerGuitar/tdfw/branch/main/graph/badge.svg)
+![Coverage](https://codecov.io/gh/MichaelKramerGuitar/tdfw/branch/main/graph/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 
 # tdfw
