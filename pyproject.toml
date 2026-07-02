@@ -1,0 +1,41 @@
+[project]
+name = "tdfw"
+version = "0.1.0"
+description = "TouchDesigner Framework CLI scaffold tool for opinionated State Driven Command and Control/Code Driven project architecture"
+authors = [{ name = "Michael Kramer", email = "michael.kramer.guitar@gmail.com" }]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = ["click"]
+
+[dependency-groups]
+dev = ["pytest", "pytest-cov", "twine"]
+
+[project.urls]
+Homepage = "https://github.com/MichaelKramerGuitar/tdfw"
+Repository = "https://github.com/MichaelKramerGuitar/tdfw"
+Issues = "https://github.com/MichaelKramerGuitar/tdfw/issues"
+
+[project.scripts]
+tdfw = "tdfw.cli:cli"
+
+[tool.setuptools]
+packages = ["tdfw"]
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=tdfw --cov-report=xml --cov-report=term-missing"
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/__init__.py",
+    "tests/*"
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
