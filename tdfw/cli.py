@@ -1,5 +1,11 @@
 import os
 import click
+import subprocess
+import shutil
+
+def check_tool(tool_name):
+    """Return True if tool is available in PATH"""
+    return shutil.which(tool_name) is not None
 
 def ensure_dir(path):
     if not os.path.exists(path):
@@ -10,9 +16,14 @@ def cli():
     """TouchDesigner Framework CLI (tdfw)"""
     pass
 
+# ----------------------------
+# App scaffolding
+# ----------------------------
 @click.command()
 @click.argument("app_name")
-def start_app(app_name):
+@click.option("--td-path", default=None,
+              help="Override path to TouchDesigner executable")
+def start_app(app_name, td_path):
     """Scaffold a new TouchDesigner app"""
     base = os.path.abspath(app_name)
     ensure_dir(base)
@@ -26,12 +37,24 @@ def start_app(app_name):
     with open(os.path.join(base, ".gitignore"), "w") as f:
         f.write("*.toe\n*.log\n")
 
-    bat_path = os.path.join(base, "BAT", f"{os.path.basename(app_name)}.bat")
+    # Default TD path
+    default_td_path = "C:\\Program Files\\Derivative\\TouchDesigner\\bin\\TouchDesigner.exe"
+    td_exec = td_path if td_path else default_td_path
 
+    # Windows .bat
+    bat_path = os.path.join(base, "BAT", f"{os.path.basename(app_name)}.bat")
     with open(bat_path, "w") as f:
         f.write(f"""@echo off
 set NODE=DEV
-start "" "C:\\Program Files\\Derivative\\TouchDesigner\\bin\\TouchDesigner.exe" "{app_name}.toe"
+start "" "{td_exec}" "{app_name}.toe"
+""")
+
+    # Mac/Linux .bash
+    bash_path = os.path.join(base, "BAT", f"{os.path.basename(app_name)}.bash")
+    with open(bash_path, "w") as f:
+        f.write(f"""#!/bin/bash
+export NODE=DEV
+open -a "{td_exec}" "{app_name}.toe"
 """)
 
     for ext in ["StartupExt", "SettingsExt", "StateExt"]:
@@ -41,6 +64,9 @@ start "" "C:\\Program Files\\Derivative\\TouchDesigner\\bin\\TouchDesigner.exe" 
 
     click.echo(f"✅ Created TouchDesigner app scaffold at {base}")
 
+# ----------------------------
+# Extension stub
+# ----------------------------
 @click.command()
 @click.argument("ext_name")
 def create_ext(ext_name):
@@ -58,5 +84,118 @@ def create_ext(ext_name):
 """)
     click.echo(f"✅ Created extension stub: {path}")
 
+# ----------------------------
+# Environment management
+# ----------------------------
+@click.command()
+@click.argument("env_name")
+def init_env(env_name):
+    """Initialize a Python virtual environment using uv (fallback to pip)"""
+    if check_tool("uv"):
+        click.echo(f"📦 Creating uv environment: {env_name}")
+        subprocess.run(["uv", "venv", env_name], check=True)
+        click.echo("✅ uv environment created")
+    elif check_tool("python"):
+        click.echo("⚠️ uv not found, falling back to Python venv + pip")
+        subprocess.run(["python", "-m", "venv", env_name], check=True)
+        subprocess.run([f"{env_name}/Scripts/pip", "install", "--upgrade", "pip"], check=True)
+        click.echo("✅ Python venv created and pip upgraded")
+    else:
+        click.echo("❌ Neither uv nor Python found. Please install one of them.")
+
+@click.command()
+@click.argument("env_name")
+def init_conda(env_name):
+    """Initialize a Conda environment"""
+    if not check_tool("conda"):
+        click.echo("❌ Conda is not installed. Please install Conda first.")
+        return
+    click.echo(f"📦 Creating Conda environment: {env_name}")
+    subprocess.run(["conda", "create", "-y", "-n", env_name, "python=3.12"], check=True)
+    click.echo("✅ Conda environment created")
+
+@click.command()
+def sync_env():
+    """Export requirements for reproducibility"""
+    click.echo("📤 Exporting requirements.txt")
+    subprocess.run(["uv", "pip", "freeze", ">", "requirements.txt"], shell=True)
+    click.echo("✅ requirements.txt exported")
+
+@click.command()
+@click.argument("env_file")
+def import_env(env_file):
+    """Import environment from requirements.txt or environment.yml"""
+    if env_file.endswith(".yml"):
+        click.echo(f"📥 Importing Conda environment from {env_file}")
+        subprocess.run(["conda", "env", "create", "-f", env_file], check=True)
+    else:
+        click.echo(f"📥 Importing uv environment from {env_file}")
+        subprocess.run(["uv", "pip", "install", "-r", env_file], check=True)
+    click.echo("✅ Environment imported")
+
+@click.command()
+def help():
+    """Show comprehensive help for tdfw"""
+    click.echo("""
+TouchDesigner Framework CLI (tdfw)
+
+Available commands:
+  
+  doctor                  Check system readiness for tdfw
+  start-app <name>        Scaffold a new TouchDesigner app
+    --td-path             Override TouchDesigner executable path
+
+  create-ext <name>       Create a new extension stub
+
+  init-env <name>         Create a uv-managed Python environment - falls back to Python venv if uv is not available
+  init-conda <name>       Create a Conda environment
+  sync-env                Export requirements.txt from current env
+  import-env <file>       Import env from requirements.txt or environment.yml
+""")
+
+@click.command()
+@click.option("--td-path", default=None,
+              help="Override path to TouchDesigner executable")
+def doctor(td_path):
+    """Check system readiness for tdfw"""
+    click.echo("🔎 Running tdfw system check...\n")
+
+    # uv
+    if check_tool("uv"):
+        click.echo("✅ uv found")
+    else:
+        click.echo("⚠️ uv not found (tdfw will fall back to pip)")
+
+    # pip
+    if check_tool("pip"):
+        click.echo("✅ pip found")
+    else:
+        click.echo("❌ pip not found — install Python with pip")
+
+    # conda
+    if check_tool("conda"):
+        click.echo("✅ conda found")
+    else:
+        click.echo("⚠️ conda not found (optional, only needed if you want Conda envs)")
+
+    # TouchDesigner executable
+    default_td_path = "C:\\Program Files\\Derivative\\TouchDesigner\\bin\\TouchDesigner.exe"
+    td_exec = td_path if td_path else default_td_path
+    if os.path.exists(td_exec):
+        click.echo(f"✅ TouchDesigner executable found at {td_exec}")
+    else:
+        click.echo(f"⚠️ TouchDesigner executable not found at {td_exec}. Use --td-path to override.")
+
+    click.echo("\n🩺 System check complete.")
+
+# ----------------------------
+# Register commands
+# ----------------------------
+cli.add_command(help)
+cli.add_command(doctor)
 cli.add_command(start_app)
 cli.add_command(create_ext)
+cli.add_command(init_env)
+cli.add_command(init_conda)
+cli.add_command(sync_env)
+cli.add_command(import_env)

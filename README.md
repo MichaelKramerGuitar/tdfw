@@ -18,6 +18,9 @@ But the concept of a network of nodes and subnodes made sense to my programmer/s
 # Install 
 uv pip install tdfw
 
+# Confirm installation and check options
+tdfw help
+
 # Start a TouchDesigner App
 tdfw start-app <MyFirstApp>
 
