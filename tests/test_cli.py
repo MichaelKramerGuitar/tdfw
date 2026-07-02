@@ -114,3 +114,33 @@ def test_doctor_missing_td_path(runner, tmp_path):
     fake_path = tmp_path / "TouchDesigner.exe"
     result = runner.invoke(cli.doctor, ["--td-path", str(fake_path)])
     assert "TouchDesigner executable not found" in result.output
+
+def test_export_env_uv(runner, tmp_path, monkeypatch):
+    monkeypatch.setattr(cli, "check_tool", lambda tool: tool == "uv")
+    monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: None)
+    output_file = tmp_path / "req.txt"
+    result = runner.invoke(cli.export_env, ["--manager", "uv", "--output", str(output_file)])
+    assert result.exit_code == 0
+    assert "uv environment exported" in result.output
+
+def test_export_env_pip(runner, tmp_path, monkeypatch):
+    monkeypatch.setattr(cli, "check_tool", lambda tool: tool == "pip")
+    monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: None)
+    output_file = tmp_path / "req.txt"
+    result = runner.invoke(cli.export_env, ["--manager", "pip", "--output", str(output_file)])
+    assert result.exit_code == 0
+    assert "pip environment exported" in result.output
+
+def test_export_env_conda(runner, tmp_path, monkeypatch):
+    monkeypatch.setattr(cli, "check_tool", lambda tool: tool == "conda")
+    monkeypatch.setattr(cli.subprocess, "run", lambda *a, **k: None)
+    output_file = tmp_path / "env.yml"
+    result = runner.invoke(cli.export_env, ["--manager", "conda", "--output", str(output_file)])
+    assert result.exit_code == 0
+    assert "conda environment exported" in result.output
+
+def test_export_env_missing_tool(runner, monkeypatch):
+    # Simulate no tool installed
+    monkeypatch.setattr(cli, "check_tool", lambda tool: False)
+    result = runner.invoke(cli.export_env, ["--manager", "uv"])
+    assert "❌ uv not installed" in result.output
