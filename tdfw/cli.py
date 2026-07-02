@@ -133,6 +133,39 @@ def import_env(env_file):
         subprocess.run(["uv", "pip", "install", "-r", env_file], check=True)
     click.echo("✅ Environment imported")
 
+
+@click.command()
+@click.option("--manager", type=click.Choice(["uv", "pip", "conda"]), default="uv",
+              help="Environment manager to export from")
+@click.option("--output", default="requirements.txt",
+              help="Output file (requirements.txt or environment.yml)")
+def export_env(manager, output):
+    """Export environment for reproducibility (uv, pip, or conda)"""
+    if manager == "uv":
+        if not check_tool("uv"):
+            click.echo("❌ uv not installed")
+            return
+        click.echo(f"📤 Exporting uv environment to {output}")
+        subprocess.run(["uv", "pip", "freeze"], stdout=open(output, "w"), check=True)
+        click.echo(f"✅ uv environment exported to {output}")
+
+    elif manager == "pip":
+        if not check_tool("pip"):
+            click.echo("❌ pip not installed")
+            return
+        click.echo(f"📤 Exporting pip environment to {output}")
+        subprocess.run(["pip", "freeze"], stdout=open(output, "w"), check=True)
+        click.echo(f"✅ pip environment exported to {output}")
+
+    elif manager == "conda":
+        if not check_tool("conda"):
+            click.echo("❌ conda not installed")
+            return
+        click.echo(f"📤 Exporting conda environment to {output}")
+        subprocess.run(["conda", "env", "export"], stdout=open(output, "w"), check=True)
+        click.echo(f"✅ conda environment exported to {output}")
+
+
 @click.command()
 def help():
     """Show comprehensive help for tdfw"""
@@ -140,17 +173,26 @@ def help():
 TouchDesigner Framework CLI (tdfw)
 
 Available commands:
-  
+
   doctor                  Check system readiness for tdfw
+
   start-app <name>        Scaffold a new TouchDesigner app
     --td-path             Override TouchDesigner executable path
 
   create-ext <name>       Create a new extension stub
 
-  init-env <name>         Create a uv-managed Python environment - falls back to Python venv if uv is not available
+  init-env <name>         Create a uv-managed Python environment
+                          Falls back to Python venv if uv is not available
+
   init-conda <name>       Create a Conda environment
-  sync-env                Export requirements.txt from current env
-  import-env <file>       Import env from requirements.txt or environment.yml
+
+  sync-env                Export requirements.txt from current uv environment
+
+  import-env <file>       Import environment from requirements.txt or environment.yml
+
+  export-env              Export environment snapshot
+    --manager [uv|pip|conda]   Choose environment manager (default: uv)
+    --output <file>            Output file (requirements.txt or environment.yml)
 """)
 
 @click.command()
@@ -199,3 +241,4 @@ cli.add_command(init_env)
 cli.add_command(init_conda)
 cli.add_command(sync_env)
 cli.add_command(import_env)
+cli.add_command(export_env)
