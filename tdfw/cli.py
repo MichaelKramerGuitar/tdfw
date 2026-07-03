@@ -59,25 +59,33 @@ open -a "{td_exec}" "{app_name}.toe"
 
     # Stub LoggerExt
     with open(os.path.join(base, "DAT", "LoggerExt.py"), "w") as f:
-        f.write("""class LoggerExt:
-    def __init__(self, ownerComp):
-        self.ownerComp = ownerComp
+        f.write("""import datetime
+    import os
 
-    def Log(self, message: str):
-        with open("LOG/app.log", "a") as log_file:
-            log_file.write(message + "\\n")
-""")
+    class LoggerExt:
+        \"""
+        LoggerExt writes timestamped messages to a per-run log file
+        in the LOG/ directory. Each run gets its own file named
+        app_<YYYYMMDD-HHMMSS>.log.
+        \"""
 
-    # Stub StartupExt
-    with open(os.path.join(base, "DAT", "StartupExt.py"), "w") as f:
-        f.write("""class StartupExt:
-    def __init__(self, ownerComp):
-        self.ownerComp = ownerComp
+        def __init__(self, ownerComp):
+            self.ownerComp = ownerComp
+            # Ensure LOG directory exists
+            os.makedirs("LOG", exist_ok=True)
+            # Create a unique log file for this run
+            run_id = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+            self.log_file = os.path.join("LOG", f"app_{run_id}.log")
 
-    def Startup(self):
-        op.LOG.Log("StartupExt.Startup()")
-        op.SETTINGS.ConfigSettings()
-""")
+        def Log(self, message: str):
+            \"""
+            Append a log entry with a timestamp.
+            \"""
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            entry = f"[{timestamp}] {message}"
+            with open(self.log_file, "a", encoding="utf-8") as log_file:
+                log_file.write(entry + "\\n")
+    """)
 
     # Stub SettingsExt
     with open(os.path.join(base, "DAT", "SettingsExt.py"), "w") as f:
