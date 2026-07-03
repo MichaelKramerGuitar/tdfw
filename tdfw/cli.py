@@ -43,8 +43,8 @@ def start_app(app_name, td_path, ide):
         f.write(f"""@echo off
 set NODE=DEV
 cd ..
-{ide} .
 start "{td_exec}" "{app_name}.toe"
+{ide} .
 """)
 
     # Mac/Linux .bash
@@ -53,8 +53,8 @@ start "{td_exec}" "{app_name}.toe"
         f.write(f"""#!/bin/bash
 export NODE=DEV
 cd ..
-{ide} .
 open -a "{td_exec}" "{app_name}.toe"
+{ide} .
 """)
 
     # Stub LoggerExt
