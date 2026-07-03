@@ -17,9 +17,17 @@ But the concept of a network of nodes and subnodes made sense to my programmer/s
 ```bash
 # 1. Install prerequisites
 
-# Make sure Python is installed and matches the TouchDesigner distributions version and a package manager like uv is available globally.
+# Make sure Python is installed and matches the TouchDesigner
+# distributions version and a package manager like uv is 
+# available globally.
 
-# 2. Install tdfw globally
+# one level back from where you want your TD project 
+
+# run: `uv venv` then activate the virtual environment
+# you just created
+
+
+# 2. Install tdfw in the venv
 uv pip install --upgrade tdfw
 
 # 3. Confirm installation and explore options
@@ -35,10 +43,29 @@ tdfw start-app <MyFirstApp>
 ---
 
 ### Now hook in your TD project with this scaffolding
-- **DAT/STARTUP/StartupExecute.py** is scaffolded automatically with the `onStart()` hook.  
+- **DAT/STARTUP/StartupExecute.py** is scaffolded automatically 
+with the `onStart()` hook.  
 - **Echo message** nudges the user only to open TD and save the `.toe`.  
 
-This way, the scaffold is truly turnkey: once you save the `.toe`, the startup hook is already wired to your `StartupExt`.
+This way, the scaffold is truly turnkey: once you save the `.toe`, the
+ startup hook is already wired to your `StartupExt`.
+
+Open TouchDesigner > 
+
+File > Create Project Folder 
+
+In dialog: 
+  - Path: 
+    > Use the file system nav to select ONE LEVEL BACK FROM THE ROOT 
+        of Project you just created 
+  - Project Folder:
+    > name it EXACTLY this: {os.path.basename(app_name)}
+   
+  - Rename File: 
+    > ENSURE CHECKED
+
+  - Media Folders: 
+    > Select/Unselect whatever Media Folders you want to create
 
 Once this step is complete and the `.toe` file exists then you can open your project and code editor in one double-click on BAT/<app>.bat or BAT/<app>.bash files via your File Explorer
 ---

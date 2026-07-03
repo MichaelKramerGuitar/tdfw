@@ -44,7 +44,7 @@ def start_app(app_name, td_path, ide):
 set NODE=DEV
 cd ..
 {ide} .
-start "" "{td_exec}" "{app_name}.toe"
+start "{td_exec}" "{app_name}.toe"
 """)
 
     # Mac/Linux .bash
@@ -197,7 +197,23 @@ tdfw import-env requirements.txt
 
 # Next Steps
 
-Open TouchDesigner and save a new project as {os.path.basename(app_name)}.toe in this directory.
+Open TouchDesigner > 
+
+File > Create Project Folder 
+
+In dialog: 
+  - Path: 
+    > Use the file system nav to select ONE LEVEL BACK FROM THE ROOT 
+        of Project you just created 
+  - Project Folder:
+    > name it EXACTLY this: {os.path.basename(app_name)}
+   
+  - Rename File: 
+    > ENSURE CHECKED
+
+  - Media Folders: 
+    > Select/Unselect whatever Media Folders you want to create
+
 
 The scaffold already includes DAT/STARTUP/StartupExecute.py with:
 
@@ -215,9 +231,26 @@ So once you save the .toe, the startup hook is ready to bridge into StartupExt.p
     ✅ Location: {base}
 
     ➡ Next Steps:
-    1. Open TouchDesigner
-    2. Save your project as: {os.path.basename(app_name)}.toe
-    3. Double-click your launcher:
+    1. 
+        Open TouchDesigner > 
+
+        File > Create Project Folder 
+
+        In dialog: 
+        - Path: 
+            > Use the file system nav to select ONE LEVEL BACK FROM THE ROOT 
+                of Project you just created 
+        - Project Folder:
+            > name it EXACTLY this: {os.path.basename(app_name)}
+        
+        - Rename File: 
+            > ENSURE CHECKED
+
+        - Media Folders: 
+            > Select/Unselect whatever Media Folders you want to create
+    2. Save and close TouchDesigner then in you File Explorer or Finder,
+       navigate to the {os.path.basename(app_name)} directory
+    3. Find then Double-click your launcher:
             • BAT/{os.path.basename(app_name)}.bat   (Windows)
             • BAT/{os.path.basename(app_name)}.bash  (Mac/Linux)
         → This sets NODE=DEV, opens your IDE ({ide}), 
