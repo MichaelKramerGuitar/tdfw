@@ -238,8 +238,9 @@ So once you save the .toe, the startup hook is ready to bridge into StartupExt.p
 
         In dialog: 
         - Path: 
-            > Use the file system nav to select ONE LEVEL BACK FROM THE ROOT 
-                of Project you just created 
+            > Use the file system nav to select one level back from {base}
+                (so just take the /{os.path.basename(app_name)} away 
+                and select that parent folder)
         - Project Folder:
             > name it EXACTLY this: {os.path.basename(app_name)}
         
