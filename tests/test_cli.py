@@ -32,7 +32,7 @@ def test_start_app_creates_structure(runner, temp_app):
 
 def test_start_app_echo_message(runner, temp_app):
     result = runner.invoke(cli.start_app, [str(temp_app)])
-    assert "✅ Created TouchDesigner app scaffold" in result.output
+    assert "Scaffold Created" in result.output
 
 def test_create_ext_adds_file(runner, temp_app):
     runner.invoke(cli.start_app, [str(temp_app)])

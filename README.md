@@ -32,6 +32,17 @@ tdfw doctor
 # 5. Scaffold a new TouchDesigner App
 tdfw start-app <MyFirstApp>
 
+---
+
+### Now hook in your TD project with this scaffolding
+- **DAT/STARTUP/StartupExecute.py** is scaffolded automatically with the `onStart()` hook.  
+- **Echo message** nudges the user only to open TD and save the `.toe`.  
+
+This way, the scaffold is truly turnkey: once you save the `.toe`, the startup hook is already wired to your `StartupExt`.
+
+Once this step is complete and the `.toe` file exists then you can open your project and code editor in one double-click on BAT/<app>.bat or BAT/<app>.bash files via your File Explorer
+---
+
 # 6. Open your app in your editor
 cd <MyFirstApp>
 code .   # or cursor ., vim ., etc.
