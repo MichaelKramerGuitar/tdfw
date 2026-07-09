@@ -6,11 +6,15 @@ TouchDesigner Framework CLI scaffold tool with an opinionated slant towards Stat
 
 ## About
 
+---
+
 Hi, I'm Michael. I play guitar and write code. I was introduced to TouchDesigner by my friend Andrew Zolty, who's also known as `BREAKFAST`. He's an incredible kinetic artist. 
 
 Getting started with TouchDesigner as a GUI never really happened for me. I started a few YouTube courses on it but didn't have the time to follow through and learn how to use the interface. 
 
 But the concept of a network of nodes and subnodes made sense to my programmer/software engineer brain. I thought "there must be a purely code driven way to architect these TouchDesinger apps". So I looked on YouTube and found [this](https://www.youtube.com/watch?v=nQT7EhYCVg0) video (read more about that in [BACKGROUND.md](./BACKGROUND.md)). I was thrilled and what has resulted is essentially this tool which abstracts out all the boilerplate he gives. 
+
+---
 
 # How To Use
 
@@ -39,8 +43,6 @@ tdfw doctor
 
 # 5. Scaffold a new TouchDesigner App
 tdfw start-app <MyFirstApp>
-
----
 
 ### Now hook in your TD project with this scaffolding
 - **DAT/STARTUP/StartupExecute.py** is scaffolded automatically 
@@ -81,14 +83,15 @@ Now hook the rest of the boilerplate into TouchDesigner (once project is open in
     - > Expand "Extensions"
     - give <Name>Ext
     - click "into" <NAME> (shortcut "i")
-    - use the Text DAT's File Tab to choose the DAT/<Name>Ext.py file 
-    - ensure "Sync to File" is selected
+    - use the Text DATs File Tab to choose the DAT/<Name>Ext.py file 
+    - ensure `Sync to File` is selected
 
   - Right Click > Add Operator > DAT > Execute 
     - within this DAT (shortcut "i") attatch the STARTUP/StartupExecute.py script
 
 > Now you can open up a TextPort in TouchDesigner and test everything is working by running:
-```python
+
+---TextPort/Console
 python >>> op.STARTUP.Startup()
 
 # expected output in TextPort:
@@ -96,8 +99,6 @@ SettingsExt.ConfigSettings(): Running as node DEV
 
 python >>> op.APP.SetState('is_playing')
 # check LOG directory for timestamped log entries
-```
-
 ---
 
 # 6. Open your app in your editor
@@ -119,6 +120,8 @@ tdfw export-env --manager pip --output requirements.txt
 # Import environment from requirements.txt or environment.yml
 tdfw import-env requirements.txt
 ```
+
+---
 
 # Philosophy
 

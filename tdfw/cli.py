@@ -82,7 +82,7 @@ class LoggerExt:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         entry = f"[{timestamp}] {message}"
         with open(self.log_file, "a", encoding="utf-8") as log_file:
-            log_file.write(entry + "\n")
+            log_file.write(entry + "\\n")
 
 """)
 
@@ -129,15 +129,23 @@ class SettingsExt:
 
     # Stub StartupExt
     with open(os.path.join(base, "DAT", "StartupExt.py"), "w") as f:
-        f.write("""class StartupExt:
+        f.write("""from TDStoreTools import StorageManager
+import TDFunctions as TDF
+import os
+import sys
+
+
+class StartupExt:
     def __init__(self, ownerComp):
         self.ownerComp = ownerComp
 
     def AddDependenciesToPath(self):
         dep_path = f'{project.folder}/DEP/PYTHON/'
         norm_dep_path = os.path.normpath(dep_path)
+        op.LOG.Log(f"StartupExt.AddDependenciesToPath(): Adding {norm_dep_path} to sys.path")
         if norm_dep_path not in sys.path:
             sys.path.insert(0, norm_dep_path)
+            op.LOG.Log(f"StartupExt.AddDependenciesToPath(): Added {norm_dep_path} to sys.path")
 
     def Startup(self):
         self.AddDependenciesToPath()
@@ -292,10 +300,11 @@ So once you save the .toe, the startup hook is ready to bridge into StartupExt.p
     - Right Click > Add Operator > COMP > Base and re-name for each in [STARTUP, SETTINGS, LOG, APP]
 
     - Then for each <NAME> in [STARTUP, SETTINGS, LOG, APP]
+        - Ensure the Base > Common "Parent Shortcut" and "Global OP Shortcut" are set to <NAME> (i.e. STARTUP, SETTINGS, LOG, APP)
         - Right click on <NAME>
         - > Customize Component
         - > Expand "Extensions"
-        - give <Name>Ext as the Extension Class Name
+        - give <Name>Ext as the Extension Class Name (for LOG use LoggerExt)
         - click "into" <NAME> (shortcut "i")
         - use the Text DAT's File Tab to choose the DAT/<Name>Ext.py file 
         - ensure "Sync to File" is selected
