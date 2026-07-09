@@ -27,7 +27,7 @@ def test_start_app_creates_structure(runner, temp_app):
     assert (temp_app / ".gitignore").exists()
     assert (temp_app / "BAT" / "MyTestApp.bat").exists()
     assert (temp_app / "BAT" / "MyTestApp.bash").exists()
-    for ext in ["StartupExt.py", "SettingsExt.py", "StateExt.py"]:
+    for ext in ["StartupExt.py", "SettingsExt.py", "AppExt.py"]:
         assert (temp_app / "DAT" / ext).exists()
 
 def test_start_app_echo_message(runner, temp_app):
