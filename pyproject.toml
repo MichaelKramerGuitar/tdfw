@@ -1,6 +1,6 @@
 [project]
 name = "tdfw"
-version = "0.1.9"
+version = "0.1.10"
 description = "TouchDesigner Framework CLI scaffold tool for opinionated State Driven Command and Control/Code Driven project architecture"
 authors = [{ name = "Michael Kramer", email = "michael.kramer.guitar@gmail.com" }]
 readme = "README.md"
