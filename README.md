@@ -68,11 +68,42 @@ In dialog:
     > Select/Unselect whatever Media Folders you want to create
 
 Once this step is complete and the `.toe` file exists then you can open your project and code editor in one double-click on BAT/<app>.bat or BAT/<app>.bash files via your File Explorer
+
+Now hook the rest of the boilerplate into TouchDesigner (once project is open in TD):
+
+  - Delete the TouchDesigner built in boilerplate
+
+  - Right Click > Add Operator > COMP > Base and re-name for each in [STARTUP, SETTINGS, LOG, APP]
+
+  - Then for each <NAME> component in [STARTUP, SETTINGS, LOG, APP]
+    - Right click on component
+    - > Customize Component
+    - > Expand "Extensions"
+    - give <Name>Ext
+    - click "into" <NAME> (shortcut "i")
+    - use the Text DAT's File Tab to choose the DAT/<Name>Ext.py file 
+    - ensure "Sync to File" is selected
+
+  - Right Click > Add Operator > DAT > Execute 
+    - within this DAT (shortcut "i") attatch the STARTUP/StartupExecute.py script
+
+> Now you can open up a TextPort in TouchDesigner and test everything is working by running:
+```python
+python >>> op.STARTUP.Startup()
+
+# expected output in TextPort:
+SettingsExt.ConfigSettings(): Running as node DEV
+
+python >>> op.APP.SetState('is_playing')
+# check LOG directory for timestamped log entries
+```
+
 ---
 
 # 6. Open your app in your editor
 cd <MyFirstApp>
 code .   # or cursor ., vim ., etc.
+or in you File Explorer just double-click on BAT/<app>.bat (also opens the TD project)
 
 # 7. Create Python Extension stubs
 # Run from your TouchDesigner Project Root (the dir with <MyFirstApp>.toe)
@@ -83,7 +114,7 @@ tdfw create-ext <MyFirstExt>
 tdfw init-env <MyAppEnv>
 
 # Export reproducible requirements for TouchDesigner
-tdfw export-env --manager uv --output requirements.txt
+tdfw export-env --manager pip --output requirements.txt
 
 # Import environment from requirements.txt or environment.yml
 tdfw import-env requirements.txt
