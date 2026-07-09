@@ -331,7 +331,7 @@ python >>> op.APP.SetState('is_playing')
 
     ✅ Location: {base}
 
-    ➡ Next Steps:
+    ➡  Next Steps:
     1. 
         Open TouchDesigner > 
 
@@ -340,7 +340,7 @@ python >>> op.APP.SetState('is_playing')
         In dialog: 
         - Path: 
             > Use the file system nav to select one level back from {base}
-                (so just take the /{os.path.basename(app_name)} away 
+                (so just take the /{os.path.basename(app_name)} (Mac) or \{os.path.basename(app_name)} (Windows) away 
                 and select that parent folder)
         - Project Folder:
             > name it EXACTLY this: {os.path.basename(app_name)}
