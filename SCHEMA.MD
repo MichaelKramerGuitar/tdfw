@@ -43,6 +43,21 @@ semantic_meaning:
 
 > These are the immediate primitives that naturally surround the portal.
 
+## Intention
+
+**The thing that starts every artwork.**
+
+> A very specific sentence. Could even be poetic, like a Haiku. 
+
+### Example
+
+```yaml
+intention: |
+
+  "The performer does not illuminate the portrait.
+   The performer awakens it."
+```
+
 ## Lexicon
 
 ```yaml
