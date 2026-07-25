@@ -419,3 +419,45 @@ Sparkle
 ```
 
 > the quoted words are neither signal-processing terms nor visual effects. They're perceptual features. They describe qualities that humans recognize across domains: we hear a phrase as "heavy," and we might render it with slower, denser motion; we hear it as "fragile," and render it with delicate, dissolving particles.
+
+# Compiler Architecture for Creative Systems
+
+Not because we want to "compile" TouchDesigner, but because compiler design gives us an incredibly elegant way to separate concerns:
+
+```bash
+TouchDesigner (.toe)
+          │
+          ▼
+Introspection Pass
+          │
+          ▼
+graph.yaml
+          │
+          ▼
+Semantic Analysis Pass
+          │
+          ▼
+architecture.yaml
+          │
+          ▼
+Pattern Language Pass
+          │
+          ▼
+composition.yaml
+```
+
+**Each pass adds meaning without losing the previous layer.**
+
+> That separation is powerful because it means SCHEMA.md doesn't need to know anything about connectors, and the connector extractor doesn't need to know anything about "breathing" or "memory." Those become independent, composable layers. This whole concept abstracts the tech stack into a system type like Max/MSP, Unreal Engine Blueprints, Houdini networks, or even modular synthesizers which are graphs of transformations carrying signals through expressive spaces. We're trying to outline a language for reasoning about computational art itself by separating these concerns: structure, semantics, and intention. 
+
+## Instrospection
+
+TouchDesigner exposes its entire project model through Python.
+
+That means a script can ask things like:
+
+```python
+for op in root.findChildren():
+    print(op.inputConnectors)
+```
+
